@@ -1,0 +1,10 @@
+.active {
+  color: rgb(87, 87, 255);
+  border-bottom: 1px solid rgb(87, 87, 255);
+}
+@media screen and (max-width: 768px) {
+  .active {
+    border-bottom: none;
+    font-weight: bold;
+  }
+}

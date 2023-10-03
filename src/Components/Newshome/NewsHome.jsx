@@ -2,15 +2,19 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { BsBookmark, BsShare } from "react-icons/bs";
 import { AiFillEye } from "react-icons/ai";
+import { useNavigate } from "react-router-dom";
 
 const NewsHome = () => {
   const [news, setNews] = useState([]);
-  const [data, setData] = useState({});
+  const navigate = useNavigate();
 
   const handleNewsDetails = (id) => {
     const clickedNews = news.find((element) => element._id === id);
-    setData(clickedNews);
-    console.log(data);
+    sessionStorage.clear();
+    sessionStorage.setItem("newsData", JSON.stringify(clickedNews));
+    setTimeout(() => {
+      navigate("/news-details-page");
+    }, 300);
   };
 
   useEffect(() => {

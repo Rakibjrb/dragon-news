@@ -4,17 +4,36 @@ import { AiFillTwitterCircle } from "react-icons/ai";
 import qZone1 from "../../assets/imgs/qZone1.png";
 import qZone2 from "../../assets/imgs/qZone2.png";
 import qZone3 from "../../assets/imgs/qZone3.png";
+import { useContext } from "react";
+import { AuthContext } from "../AuthProvider";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const RightMenu = () => {
+  const { googleSignIn } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleGoogleSignUp = () => {
+    googleSignIn()
+      .then(() => {
+        toast.success("User creation successfully");
+        navigate("/");
+      })
+      .catch(() => toast.error("something went wrong !!!"));
+  };
+
   return (
     <div>
       <h2 className="text-2xl font-semibold">Login with</h2>
       <div className="mt-4 space-y-3">
-        <button className="flex items-center btn btn-outline w-full">
+        <button
+          onClick={handleGoogleSignUp}
+          className="flex items-center btn btn-outline w-full"
+        >
           <BsGoogle className="text-xl" /> <p>Login With Google</p>
         </button>
         <button className="flex items-center btn btn-outline w-full">
-          <BsGithub className="text-xl" /> <p>Login With Google</p>
+          <BsGithub className="text-xl" /> <p>Login With Github</p>
         </button>
       </div>
       <div className="mt-7">

@@ -1,12 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
 import Nav from "../../Layout/Navbar/Nav";
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import { AuthContext } from "../../Components/AuthProvider";
 import toast from "react-hot-toast";
 
 const Login = () => {
-  const { loginWithEmailPassowrd } = useContext(AuthContext);
+  const { loginWithEmailPassowrd, forgotPassword } = useContext(AuthContext);
   const navigate = useNavigate();
+  const emailRef = useRef("");
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -19,6 +20,16 @@ const Login = () => {
           navigate("/");
         }, 300);
       })
+      .catch(() => toast.error("something went wrong !!!"));
+  };
+
+  const handleForgotPassword = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    forgotPassword(emailRef.current.value)
+      .then(() =>
+        toast.success("reset password sent to your email please check.....")
+      )
       .catch(() => toast.error("something went wrong !!!"));
   };
 
@@ -36,6 +47,7 @@ const Login = () => {
                 type="email"
                 placeholder="email"
                 name="email"
+                ref={emailRef}
                 className="input input-bordered"
                 required
               />
@@ -52,7 +64,11 @@ const Login = () => {
                 required
               />
               <label className="label">
-                <a href="#" className="label-text-alt link link-hover">
+                <a
+                  onClick={handleForgotPassword}
+                  href="#"
+                  className="label-text-alt link link-hover"
+                >
                   Forgot password?
                 </a>
               </label>

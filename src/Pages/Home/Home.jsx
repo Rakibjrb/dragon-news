@@ -9,6 +9,10 @@ import AmazingNews from "../../Components/AmazingNews/AmazingNews";
 
 const Home = () => {
   const data = useLoaderData();
+  const randomNumber = () => Math.floor(Math.random() * 10) + 1;
+  const newsTitle = data
+    .slice(0, randomNumber())
+    .map((singleNews) => singleNews.title);
 
   return (
     <>
@@ -20,10 +24,7 @@ const Home = () => {
           pauseOnHover={true}
           speed={100}
         >
-          <Link>
-            Match Highlights: Germany vs Spain — as it happened ! Match
-            Highlights: Germany vs Spain as...
-          </Link>
+          <Link className="mr-20">{newsTitle}</Link>
         </Marquee>
       </div>
       <Nav />

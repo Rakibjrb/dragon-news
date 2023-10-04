@@ -6,6 +6,7 @@ import Login from "../Pages/Login/Login";
 import SignUp from "../Pages/SignUp/SignUp";
 import NewsDetails from "../Pages/NewsDetails/NewsDetails";
 import AuthProvider from "../Components/AuthProvider";
+import PrivateRoute from "./PrivateRoute";
 
 export const router = createBrowserRouter([
   {
@@ -31,7 +32,11 @@ export const router = createBrowserRouter([
       },
       {
         path: "/news-details-page/:id",
-        element: <NewsDetails />,
+        element: (
+          <PrivateRoute>
+            <NewsDetails />
+          </PrivateRoute>
+        ),
         loader: () => fetch("../../news.json"),
       },
     ],

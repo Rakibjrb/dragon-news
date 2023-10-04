@@ -1,6 +1,8 @@
 import { Link, NavLink } from "react-router-dom";
-import User from "../../assets/imgs/user.png";
 import "./nav.css";
+import { useContext } from "react";
+import { AuthContext } from "../../Components/AuthProvider";
+import toast from "react-hot-toast";
 
 const links = (
   <>
@@ -17,8 +19,16 @@ const links = (
 );
 
 const Nav = () => {
+  const { user, logOut } = useContext(AuthContext);
+
+  const handleLogout = () => {
+    logOut()
+      .then(() => toast.success("logout success....."))
+      .catch(() => toast.error("something went wrong !!!"));
+  };
+
   return (
-    <nav className="navbar bg-base-100">
+    <div className="navbar bg-base-100">
       <div className="navbar-start">
         <div className="dropdown">
           <label tabIndex={0} className="btn btn-ghost lg:hidden">
@@ -39,7 +49,7 @@ const Nav = () => {
           </label>
           <ul
             tabIndex={0}
-            className="space-y-5 menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+            className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
           >
             {links}
           </ul>
@@ -48,16 +58,47 @@ const Nav = () => {
       <div className="navbar-center hidden lg:flex">
         <ul className="space-x-5 menu-horizontal px-1">{links}</ul>
       </div>
+
       <div className="navbar-end">
-        <img className="w-10 h-10 mr-3" src={User} alt="user image" />
-        <Link
-          to="/login-form"
-          className="btn rounded-none  bg-[#403F3F] text-white"
-        >
-          Login
-        </Link>
+        {user?.email ? (
+          <div className="dropdown dropdown-end">
+            <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+              <div className="w-10 rounded-full">
+                <img
+                  src={
+                    user?.photoURL
+                      ? user?.photoURL
+                      : "https://lh3.googleusercontent.com/a/ACg8ocJLTrmI3qoKI-dvm1-OFFZrxNc7lEG0zLW7lmDj5EyWLXI=s96-c"
+                  }
+                />
+              </div>
+            </label>
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+            >
+              <li>
+                <Link className="btn btn-sm  btn-ghost">
+                  {user?.displayName}
+                </Link>
+              </li>
+              <li>
+                <button
+                  onClick={handleLogout}
+                  className="btn btn-sm  btn-ghost"
+                >
+                  Logout
+                </button>
+              </li>
+            </ul>
+          </div>
+        ) : (
+          <Link to="/login-form">
+            <button className="btn btn-neutral">Login</button>
+          </Link>
+        )}
       </div>
-    </nav>
+    </div>
   );
 };
 

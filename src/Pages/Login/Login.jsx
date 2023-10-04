@@ -1,13 +1,33 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Nav from "../../Layout/Navbar/Nav";
+import { useContext } from "react";
+import { AuthContext } from "../../Components/AuthProvider";
+import toast from "react-hot-toast";
 
 const Login = () => {
+  const { loginWithEmailPassowrd } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    loginWithEmailPassowrd(email, password)
+      .then(() => {
+        toast.success("user login success .....");
+        setTimeout(() => {
+          navigate("/");
+        }, 300);
+      })
+      .catch(() => toast.error("something went wrong !!!"));
+  };
+
   return (
     <div>
       <Nav />
       <div className="hero min-h-[500px]">
         <div className="card flex-shrink-0 w-full max-w-md shadow-2xl bg-base-100">
-          <form className="card-body">
+          <form onSubmit={handleLogin} className="card-body">
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Email</span>
@@ -15,6 +35,7 @@ const Login = () => {
               <input
                 type="email"
                 placeholder="email"
+                name="email"
                 className="input input-bordered"
                 required
               />
@@ -26,6 +47,7 @@ const Login = () => {
               <input
                 type="password"
                 placeholder="password"
+                name="password"
                 className="input input-bordered"
                 required
               />
@@ -35,7 +57,7 @@ const Login = () => {
                 </a>
               </label>
             </div>
-            <div className="form-control mt-1">
+            <div type="submit" className="form-control mt-1">
               <button className="btn btn-primary">Login</button>
             </div>
             <p className="text-sm mt-2">

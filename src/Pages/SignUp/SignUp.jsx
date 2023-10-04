@@ -5,11 +5,13 @@ import { AuthContext } from "../../Components/AuthProvider";
 import toast from "react-hot-toast";
 
 const SignUp = () => {
-  const { createUser } = useContext(AuthContext);
+  const { createUser, handleAddNameAndPhoto } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleSignUp = (e) => {
     e.preventDefault();
+    const name = e.target.name.value;
+    const photo = e.target.photo.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
     const termsandconditions = e.target.termsandconditions.checked;
@@ -21,6 +23,9 @@ const SignUp = () => {
       .then(() => {
         toast.success("Account creation successfull ....");
         e.target.reset();
+      })
+      .then(() => {
+        handleAddNameAndPhoto(name, photo);
         navigate("/login-form");
       })
       .catch(() => toast.error("something went wrong !!!"));
@@ -50,7 +55,7 @@ const SignUp = () => {
               </label>
               <input
                 type="text"
-                placeholder="photo link"
+                placeholder="Enter your photo link here"
                 className="input input-bordered"
                 name="photo"
                 required
@@ -90,7 +95,9 @@ const SignUp = () => {
               <Link className="text-red-500">terms & conditions</Link>
             </label>
             <div className="form-control mt-1">
-              <button className="btn btn-primary">Sign Up</button>
+              <button type="submit" className="btn btn-primary">
+                Sign Up
+              </button>
             </div>
             <p className="text-sm mt-2">
               {`Don't`} have any account?{" "}

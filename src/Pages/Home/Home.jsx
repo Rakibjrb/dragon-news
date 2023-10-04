@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLoaderData } from "react-router-dom";
 import Header from "../../Components/LogoHeader/Header";
 import Marquee from "react-fast-marquee";
 import Nav from "../../Layout/Navbar/Nav";
@@ -8,6 +8,8 @@ import RightMenu from "../../Components/RightMenu/RightMenu";
 import AmazingNews from "../../Components/AmazingNews/AmazingNews";
 
 const Home = () => {
+  const data = useLoaderData();
+
   return (
     <>
       <Header />
@@ -30,7 +32,7 @@ const Home = () => {
           <LeftMenu />
         </div>
         <div className="col-span-2">
-          <NewsHome />
+          <NewsHome data={data} />
         </div>
         <div>
           <RightMenu />

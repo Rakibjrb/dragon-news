@@ -14,6 +14,7 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+        loader: () => fetch("news.json"),
       },
       {
         path: "/login-form",
@@ -24,8 +25,9 @@ export const router = createBrowserRouter([
         element: <SignUp />,
       },
       {
-        path: "/news-details-page",
+        path: "/news-details-page/:id",
         element: <NewsDetails />,
+        loader: () => fetch("../../news.json"),
       },
     ],
     errorElement: <ErrorRoute />,

@@ -1,36 +1,17 @@
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import { BsBookmark, BsShare } from "react-icons/bs";
 import { AiFillEye } from "react-icons/ai";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
-const NewsHome = () => {
-  const [news, setNews] = useState([]);
-  const navigate = useNavigate();
-
-  const handleNewsDetails = (id) => {
-    const clickedNews = news.find((element) => element._id === id);
-    sessionStorage.clear();
-    sessionStorage.setItem("newsData", JSON.stringify(clickedNews));
-    setTimeout(() => {
-      navigate("/news-details-page");
-    }, 300);
-  };
-
-  useEffect(() => {
-    fetch("news.json")
-      .then((res) => res.json())
-      .then((newsData) => setNews(newsData))
-      .catch(() => toast.error("news not loaded something went wrong !!!"));
-  }, []);
-
+const NewsHome = ({ data }) => {
   return (
     <div>
       <h2 className="text-2xl font-semibold mb-4">Dragon News Home</h2>
       <div className="space-y-10">
-        {news.map((singleNews) => {
+        {data.map((singleNews) => {
           const { _id, author, title, thumbnail_url, rating, total_view } =
             singleNews;
+          const id = _id;
           let desc = singleNews?.details;
           let description = desc.slice(0, 300);
           return (
@@ -57,12 +38,11 @@ const NewsHome = () => {
                 </div>
               </div>
               <div className="p-5 pb-0">
-                <h2
-                  onClick={() => handleNewsDetails(_id)}
-                  className="text-2xl font-bold mb-4 hover:cursor-pointer"
-                >
-                  {title}
-                </h2>
+                <Link to={`/news-details-page/${id}`}>
+                  <h2 className="text-2xl font-bold mb-4 hover:cursor-pointer">
+                    {title}
+                  </h2>
+                </Link>
                 <img
                   className="w-full h-80 mb-4"
                   src={thumbnail_url}
@@ -70,12 +50,9 @@ const NewsHome = () => {
                 />
                 <p className="mb-3">{description} .....</p>
 
-                <p
-                  onClick={() => handleNewsDetails(_id)}
-                  className="text-red-500 hover:cursor-pointer"
-                >
-                  Read More
-                </p>
+                <Link to={`/news-details-page/${id}`}>
+                  <p className="text-red-500 hover:cursor-pointer">Read More</p>
+                </Link>
               </div>
               <div className="p-5 flex justify-between items-center">
                 <div className="flex gap-3">
@@ -123,3 +100,7 @@ const NewsHome = () => {
 };
 
 export default NewsHome;
+
+NewsHome.propTypes = {
+  data: PropTypes.array,
+};

@@ -3,23 +3,16 @@ import { AiFillEye, AiOutlineSchedule } from "react-icons/ai";
 import { BiLeftArrowAlt } from "react-icons/bi";
 import Header from "../../Components/LogoHeader/Header";
 import RightMenu from "../../Components/RightMenu/RightMenu";
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
+import { Link, useLoaderData, useParams } from "react-router-dom";
 
 const NewsDetails = () => {
-  const newses = JSON.parse(sessionStorage.getItem("newsData"));
+  const newses = useLoaderData();
+  const newsId = useParams();
+  const news = newses.find((news) => news._id === newsId.id);
   const { _id, author, title, thumbnail_url, rating, total_view, details } =
-    newses;
+    news;
 
-  const [news, setNews] = useState([]);
-
-  useEffect(() => {
-    fetch("news.json")
-      .then((res) => res.json())
-      .then((newsData) => setNews(newsData))
-      .catch(() => toast.error("news not loaded something went wrong !!!"));
-  }, []);
+  const randomNumber = () => Math.floor(Math.random() * 26 + 1);
 
   return (
     <>
@@ -113,7 +106,7 @@ const NewsDetails = () => {
             <h2 className="text-2xl font-bold">Editor Insights</h2>
             <div className="w-full mt-5">
               <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
-                {news.slice(7, 10).map((element) => (
+                {newses.slice(0, randomNumber()).map((element) => (
                   <div key={element?._id}>
                     <div className="card card-compact">
                       <figure>
@@ -124,7 +117,9 @@ const NewsDetails = () => {
                         />
                       </figure>
                       <div>
-                        <h2 className="card-title mt-3">{element?.title}</h2>
+                        <Link to={`/news-details-page/${element?._id}`}>
+                          <h2 className="card-title mt-3">{element?.title}</h2>
+                        </Link>
                         <div className=" flex items-center gap-2 mt-3">
                           <p className="text-xl">
                             <AiOutlineSchedule />

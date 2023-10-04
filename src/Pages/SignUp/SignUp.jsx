@@ -1,13 +1,37 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Nav from "../../Layout/Navbar/Nav";
+import { useContext } from "react";
+import { AuthContext } from "../../Components/AuthProvider";
+import toast from "react-hot-toast";
 
 const SignUp = () => {
+  const { createUser } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleSignUp = (e) => {
+    e.preventDefault();
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    const termsandconditions = e.target.termsandconditions.checked;
+    if (!termsandconditions) {
+      toast.error("please accept our terms & conditions....");
+      return;
+    }
+    createUser(email, password)
+      .then(() => {
+        toast.success("Account creation successfull ....");
+        e.target.reset();
+        navigate("/login-form");
+      })
+      .catch(() => toast.error("something went wrong !!!"));
+  };
+
   return (
     <div>
       <Nav />
       <div className="hero min-h-[600px]">
         <div className="card flex-shrink-0 w-full max-w-md shadow-2xl bg-base-100">
-          <form className="card-body">
+          <form onSubmit={handleSignUp} className="card-body">
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Name</span>
@@ -16,6 +40,7 @@ const SignUp = () => {
                 type="text"
                 placeholder="full name"
                 className="input input-bordered"
+                name="name"
                 required
               />
             </div>
@@ -27,6 +52,7 @@ const SignUp = () => {
                 type="text"
                 placeholder="photo link"
                 className="input input-bordered"
+                name="photo"
                 required
               />
             </div>
@@ -38,6 +64,7 @@ const SignUp = () => {
                 type="email"
                 placeholder="email"
                 className="input input-bordered"
+                name="email"
                 required
               />
             </div>
@@ -49,6 +76,7 @@ const SignUp = () => {
                 type="password"
                 placeholder="password"
                 className="input input-bordered"
+                name="password"
                 required
               />
             </div>

@@ -5,6 +5,7 @@ import ErrorRoute from "../Layout/ErrorRoute";
 import Login from "../Pages/Login/Login";
 import SignUp from "../Pages/SignUp/SignUp";
 import NewsDetails from "../Pages/NewsDetails/NewsDetails";
+import AuthProvider from "../Components/AuthProvider";
 
 export const router = createBrowserRouter([
   {
@@ -13,7 +14,11 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: (
+          <AuthProvider>
+            <Home />
+          </AuthProvider>
+        ),
         loader: () => fetch("news.json"),
       },
       {
